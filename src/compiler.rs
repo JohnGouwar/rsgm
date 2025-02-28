@@ -2,9 +2,9 @@ use std::collections::HashMap;
 
 use rsdd::{
     repr::{
-        cnf::Cnf,
-        var_label::{Literal, VarLabel},
-        wmc::WmcParams,
+        Cnf,
+        Literal, VarLabel,
+        WmcParams,
     },
     util::semirings::{RealSemiring, Semiring},
 };
@@ -75,7 +75,7 @@ impl BayesianNetworkCNF {
             clauses.append(&mut exactly_one(cur_indic));
         }
         BayesianNetworkCNF {
-            cnf: Cnf::new(clauses),
+            cnf: Cnf::new(&clauses),
             indicators,
             params: WmcParams::new(wmc_params),
         }
@@ -109,7 +109,7 @@ fn implies(t1: &[Literal], t2: &[Literal]) -> Vec<Vec<Literal>> {
     // negate the lhs
     let lhs: Vec<Literal> = t1
         .iter()
-        .map(|l| Literal::new(l.get_label(), !l.get_polarity()))
+        .map(|l| Literal::new(l.label(), !l.polarity()))
         .collect();
     for v in t2.iter() {
         let mut new_clause = lhs.clone();
